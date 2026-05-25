@@ -1,0 +1,26 @@
+# Core ML / NLP
+torch>=2.0.0
+transformers>=4.36.0
+accelerate>=0.25.0
+datasets>=2.16.0
+peft>=0.7.0
+trl>=0.7.0
+bert-score>=0.3.13
+sentencepiece
+
+# KGQA / Graph
+networkx>=3.0
+SPARQLWrapper>=2.0.0
+faiss-cpu>=1.7.4   # use faiss-gpu if GPU available
+
+# Scientific
+numpy>=1.24.0
+scipy>=1.10.0
+scikit-learn>=1.3.0
+pandas>=2.0.0
+
+# Utilities
+tqdm>=4.65.0
+requests>=2.31.0
+nltk>=3.8.0
+openai>=1.0.0      # for GPT-4 baselines (optional)

@@ -1,0 +1,82 @@
+# Python
+__pycache__/
+*.py[cod]
+*.pyo
+*.pyd
+.Python
+*.egg
+*.egg-info/
+dist/
+build/
+.eggs/
+
+# Virtual environments
+.venv/
+venv/
+env/
+.conda/
+
+# Jupyter
+.ipynb_checkpoints/
+*.ipynb
+
+# Large model files — DO NOT commit (see LARGE_FILES.md)
+*.bin
+*.safetensors
+*.ckpt
+*.pt
+*.pth
+*.gguf
+
+# Large data / compressed archives
+*.gz
+*.tar
+*.zip
+*.nt
+*.pkl
+*.pickle
+*.hdf5
+*.h5
+*.npy
+*.npz
+*.faiss
+*.index
+
+# Virtuoso DB
+virtuoso_db/
+*.trx
+*.db
+
+# Results output (regenerate from scripts)
+results/
+# But keep the results/ directory itself
+!results/.gitkeep
+
+# Log files
+*.log
+*.out
+*.aux
+*.blg
+*.bbl
+*.fls
+*.fdb_latexmk
+
+# OS
+.DS_Store
+Thumbs.db
+.idea/
+.vscode/
+*.swp
+*~
+
+# Secrets / API keys
+.env
+*.env
+secrets.json
+api_keys.txt
+
+# Cache directories
+mid_cache/
+feature_cache/
+__pycache__/
+.cache/
