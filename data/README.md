@@ -139,7 +139,7 @@ data/gnn_input/
 
 ## GMT-KBQA Data and Models
 
-GMT-KBQA's authors host all preprocessed data and trained checkpoints on their official Google Drive. **You do not need to prepare this data yourself** — download directly from:
+GMT-KBQA's authors host all preprocessed data and trained checkpoints on their official Google Drive. **You do not need to prepare this data yourself.** Download directly from:
 
 > https://drive.google.com/drive/folders/1QT4EG5wxtcLc8_XT5dTZ2WCi1jtByAyf
 

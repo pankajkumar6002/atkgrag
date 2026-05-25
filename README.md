@@ -4,7 +4,7 @@
 > Anonymous repository: `https://anonymous.4open.science/r/atkgrag-E85C`
 
 [![Python 3.10+](https://img.shields.io/badge/python-3.10+-blue.svg)](https://www.python.org/)
-[![License: CC BY-NC-SA 4.0](https://img.shields.io/badge/License-CC%20BY--NC--SA%204.0-lightgrey.svg)](LICENSE)
+[![License: CC BY 4.0](https://img.shields.io/badge/License-CC%20BY%204.0-lightgrey.svg)](LICENSE)
 
 ---
 
@@ -375,7 +375,7 @@ python perturbation_scripts/prepare_data_llama.py \
 
 ## License
 
-CC BY-NC-SA 4.0. See [LICENSE](LICENSE).
+CC BY 4.0. See [LICENSE](LICENSE).
 
 The external KGQA systems (GNN-RAG, GMT-KBQA, RoG, EXPLAIGNN, EPR-KGQA, BLINK) are subject to their own licenses. Please consult each repository.
 
