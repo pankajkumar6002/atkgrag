@@ -1,7 +1,7 @@
 # Query-Side Attacks on GNN-Based KGQA: Tracing Failures Through the Pipeline
 
 > **Anonymous submission**, under review. Code provided for reproducibility.  
-> Anonymous repository: `https://anonymous.4open.science/r/cascadeattack`
+> Anonymous repository: `https://anonymous.4open.science/r/atkgrag-E85C`
 
 [![Python 3.10+](https://img.shields.io/badge/python-3.10+-blue.svg)](https://www.python.org/)
 [![License: CC BY-NC-SA 4.0](https://img.shields.io/badge/License-CC%20BY--NC--SA%204.0-lightgrey.svg)](LICENSE)
@@ -93,7 +93,7 @@ cascadeattack/           ← repo root (this directory)
 ### 1. Clone this repository
 
 ```bash
-git clone https://anonymous.4open.science/r/cascadeattack
+git clone https://anonymous.4open.science/r/atkgrag-E85C
 cd cascadeattack
 ```
 
