@@ -4,7 +4,7 @@
 > Anonymous repository: `https://anonymous.4open.science/r/cascadeattack`
 
 [![Python 3.10+](https://img.shields.io/badge/python-3.10+-blue.svg)](https://www.python.org/)
-[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](LICENSE)
+[![License: CC BY-NC-SA 4.0](https://img.shields.io/badge/License-CC%20BY--NC--SA%204.0-lightgrey.svg)](LICENSE)
 
 ---
 
@@ -35,7 +35,6 @@ cascadeattack/           ← repo root (this directory)
 ├── config.py            ← central path config (all paths derive from here)
 ├── requirements.txt
 ├── environment.yml
-├── LARGE_FILES.md       ← instructions for downloading large files
 │
 ├── experiments/         ← experiment runners
 │   ├── metrics.py             # Δ_EL, Δ_SR, Δ_EA, Δ_AG implementations
@@ -367,7 +366,7 @@ python perturbation_scripts/prepare_data_llama.py \
 
 ## License
 
-MIT — see [LICENSE](LICENSE).
+CC BY-NC-SA 4.0 — see [LICENSE](LICENSE).
 
 The external KGQA systems (GNN-RAG, GMT-KBQA, RoG, EXPLAIGNN, BLINK) are subject to their own licenses. Please consult each repository.
 
