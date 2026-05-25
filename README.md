@@ -128,10 +128,7 @@ git clone https://github.com/cmavro/GNN-RAG.git            external/GNN-RAG
 # GMT-KBQA (T5-based) — second target
 git clone https://github.com/fc-liu/GMT-KBQA.git            external/GMT-KBQA
 
-# UniKGQA (NSM baseline)
-git clone https://github.com/RUCKBReasoning/UniKGQA.git      external/UniKGQA
-
-# Reasoning on Graphs (RoG)
+# Reasoning on Graphs (RoG) — used in E3 LLM-stage isolation
 git clone https://github.com/rmanluo/reasoning-on-graphs.git external/reasoning-on-graphs
 
 # SubgraphRAG
@@ -171,16 +168,22 @@ export EPR_PYTHON="$(conda run -n EPR_KGQA which python)"
 ### 4. Download datasets
 
 **CWQ (ComplexWebQuestions):**
-```bash
-# Via UniKGQA (after cloning in step 3):
-cp -r external/UniKGQA/data/CWQ/CWQ_ori/ data/CWQ/
-# Or download directly from the official source and place at data/CWQ/
+
+Download from the [official CWQ release](https://www.dropbox.com/sh/7pkwkrfnwqhsnpo/AACuu4v3YNkhirzBOeeaHYala) and place at:
+```
+data/CWQ/ComplexWebQuestions_train.json
+data/CWQ/ComplexWebQuestions_dev.json
+data/CWQ/ComplexWebQuestions_test.json   # 3,531 questions
 ```
 
+> Alternatively, if you clone UniKGQA separately for its preprocessed data, you can copy from `external/UniKGQA/data/CWQ/CWQ_ori/` — but UniKGQA is not required for our experiments.
+
 **WebQSP:**
-```bash
-cp -r external/UniKGQA/data/webqsp/webqsp_ori/data/ data/WebQSP/
-# Expected: data/WebQSP/WebQSP.test.json  (1,639 questions)
+
+Download from [Microsoft Research](https://www.microsoft.com/en-us/research/publication/the-value-of-semantic-parse-labeling-for-knowledge-base-question-answering-2/) and place at:
+```
+data/WebQSP/WebQSP.train.json
+data/WebQSP/WebQSP.test.json   # 1,639 questions
 ```
 
 See [data/README.md](data/README.md) for full details including Freebase/Virtuoso setup.
@@ -366,7 +369,7 @@ python perturbation_scripts/prepare_data_llama.py \
 
 MIT — see [LICENSE](LICENSE).
 
-The external KGQA systems (GNN-RAG, GMT-KBQA, UniKGQA, RoG) are subject to their own licenses. Please consult each repository.
+The external KGQA systems (GNN-RAG, GMT-KBQA, RoG, EXPLAIGNN, BLINK) are subject to their own licenses. Please consult each repository.
 
 ---
 
@@ -375,6 +378,5 @@ The external KGQA systems (GNN-RAG, GMT-KBQA, UniKGQA, RoG) are subject to their
 This work builds on:
 - [GNN-RAG](https://github.com/cmavro/GNN-RAG) (Mavromatis & Karypis, 2024)
 - [GMT-KBQA](https://github.com/fc-liu/GMT-KBQA) (Liu et al., 2023)
-- [UniKGQA](https://github.com/RUCKBReasoning/UniKGQA) (Jiang et al., 2023)
-- [BLINK/ELQ](https://github.com/facebookresearch/BLINK) (Wu et al., 2020)
 - [Reasoning on Graphs](https://github.com/rmanluo/reasoning-on-graphs) (Luo et al., 2024)
+- [BLINK/ELQ](https://github.com/facebookresearch/BLINK) (Wu et al., 2020)
