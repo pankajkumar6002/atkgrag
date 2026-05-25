@@ -1,6 +1,6 @@
 # Query-Side Attacks on GNN-Based KGQA: Tracing Failures Through the Pipeline
 
-> **Anonymous submission** — under review. Code provided for reproducibility.  
+> **Anonymous submission**, under review. Code provided for reproducibility.  
 > Anonymous repository: `https://anonymous.4open.science/r/cascadeattack`
 
 [![Python 3.10+](https://img.shields.io/badge/python-3.10+-blue.svg)](https://www.python.org/)
@@ -10,19 +10,19 @@
 
 ## Overview
 
-Knowledge graph question answering (KGQA) systems based on graph neural networks (GNNs) are vulnerable to **query-side adversarial attacks** — perturbations applied only to the input question, with no access to the KG, model weights, or training data.
+Knowledge graph question answering (KGQA) systems based on graph neural networks (GNNs) are vulnerable to **query-side adversarial attacks**: perturbations applied only to the input question, with no access to the KG, model weights, or training data.
 
 We introduce **CascadeAttack**, the first systematic, stage-resolved robustness study of a GNN-based KGQA pipeline. Our **stage-isolation protocol** fixes upstream outputs and perturbs only the query to attribute failures precisely to each pipeline stage (entity linking → subgraph retrieval → GNN reasoning → answer generation).
 
 **Two primary attack types:**
 
-- **Compositional Restructuring (CR)** — rewrites the question via hop-order reversal or constraint injection, leaving all entity mentions intact and preserving the SPARQL answer. Targets multi-hop GNN reasoning.
-- **Relation Synonym Swap (RS)** — replaces predicate surface forms with synonyms, keeping entity mentions unchanged. Targets GNN relation attention.
+- **Compositional Restructuring (CR)**: rewrites the question via hop-order reversal or constraint injection, leaving all entity mentions intact and preserving the SPARQL answer. Targets multi-hop GNN reasoning.
+- **Relation Synonym Swap (RS)**: replaces predicate surface forms with synonyms, keeping entity mentions unchanged. Targets GNN relation attention.
 
 **Key findings:**
 
-- Under CR, 74.0% of ELQ subgraphs contain the gold answer (identical to clean coverage) yet GNN-RAG achieves only 0.68% EM on CWQ — the GNN decoder fails, not entity linking.
-- Stage isolation shows the GNN decoder retains 52.76% CWQ EM when the subgraph retrieval stage is held fixed under RS — subgraph retrieval is the primary bottleneck.
+- Under CR, 74.0% of ELQ subgraphs contain the gold answer (identical to clean coverage) yet GNN-RAG achieves only 0.68% EM on CWQ; the GNN decoder fails, not entity linking.
+- Stage isolation shows the GNN decoder retains 52.76% CWQ EM when the subgraph retrieval stage is held fixed under RS; subgraph retrieval is the primary bottleneck.
 - Our question-embedding-weighted PPR variant (GraftNet) reorients PPR edge weights toward restructured queries, recovering substantial accuracy.
 
 ---
@@ -121,23 +121,26 @@ The experiments test three KGQA pipelines as attack targets. Clone each into `ex
 ```bash
 mkdir -p external
 
-# GNN-RAG (ReaRev) — primary target
+# GNN-RAG (ReaRev, primary target)
 git clone https://github.com/cmavro/GNN-RAG.git            external/GNN-RAG
 
-# GMT-KBQA (T5-based) — second target
+# GMT-KBQA (T5-based, second target)
 git clone https://github.com/fc-liu/GMT-KBQA.git            external/GMT-KBQA
 
-# Reasoning on Graphs (RoG) — used in E3 LLM-stage isolation
+# Reasoning on Graphs (RoG, used in E3 LLM-stage isolation)
 git clone https://github.com/rmanluo/reasoning-on-graphs.git external/reasoning-on-graphs
 
 # SubgraphRAG
-git clone https://github.com/SubgraphRAG/SubgraphRAG.git     external/SubgraphRAG
+git clone https://github.com/SubgraphRAG/SubgraphRAG.git        external/SubgraphRAG
 
 # BLINK / ELQ entity linker
-git clone https://github.com/facebookresearch/BLINK.git      external/BLINK
+git clone https://github.com/facebookresearch/BLINK.git         external/BLINK
 
-# EXPLAIGNN (for E3 experiments)
-git clone https://github.com/explaignn/EXPLAIGNN.git         external/EXPLAIGNN
+# EXPLAIGNN (E3 experiments)
+git clone https://github.com/PhilippChr/EXPLAIGNN.git           external/EXPLAIGNN
+
+# EPR-KGQA (evidence path reasoning baseline)
+git clone https://github.com/nju-websoft/EPR-KGQA.git           external/EPR-KGQA
 ```
 
 Each external repo has its own dependencies. Set up separate conda environments for models that require them:
@@ -146,10 +149,16 @@ Each external repo has its own dependencies. Set up separate conda environments 
 # GNN-RAG environment
 cd external/GNN-RAG && pip install -r requirements.txt && cd ../..
 
-# EXPLAIGNN environment (requires its own env)
+# EXPLAIGNN (requires its own env)
 conda create -n explaignn python=3.9
 conda activate explaignn
 cd external/EXPLAIGNN && pip install -r requirements.txt && cd ../..
+conda activate cascadeattack   # switch back
+
+# EPR-KGQA (requires its own env)
+conda create -n EPR_KGQA python=3.8
+conda activate EPR_KGQA
+cd external/EPR-KGQA && pip install -r requirements.txt && cd ../..
 conda activate cascadeattack   # switch back
 ```
 
@@ -175,7 +184,7 @@ data/CWQ/ComplexWebQuestions_dev.json
 data/CWQ/ComplexWebQuestions_test.json   # 3,531 questions
 ```
 
-> Alternatively, if you clone UniKGQA separately for its preprocessed data, you can copy from `external/UniKGQA/data/CWQ/CWQ_ori/` — but UniKGQA is not required for our experiments.
+> Alternatively, if you clone UniKGQA separately for its preprocessed data, you can copy from `external/UniKGQA/data/CWQ/CWQ_ori/`. UniKGQA is not required for our experiments.
 
 **WebQSP:**
 
@@ -193,19 +202,19 @@ See [data/README.md](data/README.md) for full details including Freebase/Virtuos
 
 All supplementary data and checkpoints are in one Google Drive folder:
 
-> **[Google Drive — data and checkpoints](https://drive.google.com/drive/folders/1oe_iDAhKNzr6suaK7Pa7Da9Z_X8NXgHZ?usp=drive_link)**
+**[Google Drive: data and checkpoints](https://drive.google.com/drive/folders/1oe_iDAhKNzr6suaK7Pa7Da9Z_X8NXgHZ?usp=drive_link)**
 
 | File / folder | Size | Place at |
 |---|---|---|
-| `perturbation_questions/` — perturbation JSONs (p1–p7) | ~80 MB | `data/perturbations/` |
-| `perturbation_el/` — entity linking results + embeddings | ~213 MB | `data/perturbations/` |
-| `subgraphs_p4/` — GraftNet P4 subgraphs | ~415 MB | `data/perturbations/subgraphs_p4/` |
-| `subgraphs_p7/` — GraftNet P7 subgraphs | ~2.3 GB | `data/perturbations/subgraphs_p7/` |
-| `gnn_input.zip` — pre-built GNN inputs | ~20 GB | `data/perturbations/gnn_input/` |
-| `subgraph_var.zip` — subgraph variant ablation | ~8.4 GB | `data/perturbations/subgraph_var/` |
-| `gnn_rag_checkpoints/` — GNN-RAG model checkpoints | ~271 MB | `external/GNN-RAG/data/pretrain/` |
+| `perturbation_questions/` (perturbation JSONs p1-p7) | ~80 MB | `data/perturbations/` |
+| `perturbation_el/` (entity linking results + embeddings) | ~213 MB | `data/perturbations/` |
+| `subgraphs_p4/` (GraftNet P4 subgraphs) | ~415 MB | `data/perturbations/subgraphs_p4/` |
+| `subgraphs_p7/` (GraftNet P7 subgraphs) | ~2.3 GB | `data/perturbations/subgraphs_p7/` |
+| `gnn_input.zip` (pre-built GNN inputs) | ~20 GB | `data/perturbations/gnn_input/` |
+| `subgraph_var.zip` (subgraph variant ablation) | ~8.4 GB | `data/perturbations/subgraph_var/` |
+| `gnn_rag_checkpoints/` (GNN-RAG model checkpoints) | ~271 MB | `external/GNN-RAG/data/pretrain/` |
 
-GMT-KBQA data and models are hosted by the original authors — download from their [official Google Drive](https://drive.google.com/drive/folders/1QT4EG5wxtcLc8_XT5dTZ2WCi1jtByAyf) and extract into `external/GMT-KBQA-data/`.
+GMT-KBQA data and models are hosted by the original authors. Download from their [official Google Drive](https://drive.google.com/drive/folders/1QT4EG5wxtcLc8_XT5dTZ2WCi1jtByAyf) and extract into `external/GMT-KBQA-data/`.
 
 After downloading, the layout should be:
 
@@ -261,7 +270,7 @@ bash scripts/run_e5.sh
 # → results/e5_validity_all_variants.json
 ```
 
-### Step 2: Stage-wise attack — CWQ (E1)
+### Step 2: Stage-wise attack on CWQ (E1)
 
 ```bash
 # Fast mode: reuses original subgraphs, no Virtuoso needed (~6–8 h on 4× A100)
@@ -271,7 +280,7 @@ bash scripts/run_e1_cwq.sh fast
 bash scripts/run_e1_cwq.sh full
 ```
 
-### Step 3: Stage-wise attack — WebQSP (E2)
+### Step 3: Stage-wise attack on WebQSP (E2)
 
 ```bash
 bash scripts/run_e2_webqsp.sh fast
@@ -290,7 +299,7 @@ python experiments/e3_gnn_worker.py   --pert-type p1 --dataset cwq
 python experiments/e3_llm_reasoning.py --pert-type p2 --dataset cwq
 ```
 
-### Step 6: Ablation — subgraph variants (P4/P7 GraftNet)
+### Step 6: Ablation on subgraph variants (P4/P7 GraftNet)
 
 ```bash
 bash scripts/run_ablation.sh
@@ -366,9 +375,9 @@ python perturbation_scripts/prepare_data_llama.py \
 
 ## License
 
-CC BY-NC-SA 4.0 — see [LICENSE](LICENSE).
+CC BY-NC-SA 4.0. See [LICENSE](LICENSE).
 
-The external KGQA systems (GNN-RAG, GMT-KBQA, RoG, EXPLAIGNN, BLINK) are subject to their own licenses. Please consult each repository.
+The external KGQA systems (GNN-RAG, GMT-KBQA, RoG, EXPLAIGNN, EPR-KGQA, BLINK) are subject to their own licenses. Please consult each repository.
 
 ---
 
@@ -378,4 +387,6 @@ This work builds on:
 - [GNN-RAG](https://github.com/cmavro/GNN-RAG) (Mavromatis & Karypis, 2024)
 - [GMT-KBQA](https://github.com/fc-liu/GMT-KBQA) (Liu et al., 2023)
 - [Reasoning on Graphs](https://github.com/rmanluo/reasoning-on-graphs) (Luo et al., 2024)
+- [EXPLAIGNN](https://github.com/PhilippChr/EXPLAIGNN) (Christmann et al., 2023)
+- [EPR-KGQA](https://github.com/nju-websoft/EPR-KGQA) (Ye et al., 2022)
 - [BLINK/ELQ](https://github.com/facebookresearch/BLINK) (Wu et al., 2020)
