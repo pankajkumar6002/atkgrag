@@ -63,6 +63,8 @@ cascadeattack/           ← repo root (this directory)
 ├── perturbation_scripts/ ← generate perturbation datasets
 │   ├── prepare_data_llama.py  # generate via Llama-3.1-8B
 │   ├── llama3.28b.py
+│   ├── metaqa_perturb_crrs.py # MetaQA: CR, RS, S1-S4 (Llama-3.3-70B)
+│   ├── metaqa_es_p1.py        # MetaQA: Entity Swap (deterministic)
 │   ├── epr_pert_experiment.py
 │   └── graphrag_pert_experiment.py
 │
@@ -76,6 +78,7 @@ cascadeattack/           ← repo root (this directory)
 │
 ├── external/            ← clone target model repos here (see Setup §3)
 ├── data/                ← datasets and preprocessed files (see data/README.md)
+│   ├── METAQA.md              # MetaQA setup, training recipe, replication
 │   ├── perturbations/         # canonical p1–p7 perturbation sets
 │   ├── perturbations_raw/     # temperature-variant raw sets
 │   ├── resources/             # Freebase entity files
@@ -213,6 +216,14 @@ All supplementary data and checkpoints are in one Google Drive folder:
 | `gnn_input.zip` (pre-built GNN inputs) | ~20 GB | `data/perturbations/gnn_input/` |
 | `subgraph_var.zip` (subgraph variant ablation) | ~8.4 GB | `data/perturbations/subgraph_var/` |
 | `gnn_rag_checkpoints/` (GNN-RAG model checkpoints) | ~271 MB | `external/GNN-RAG/data/pretrain/` |
+| `metaqa/` (MetaQA 2-hop/3-hop, NSM format) | ~1.6 GB | `data/metaqa/` |
+| `metaqa_perturbations/` (all 7 types, full test sets) | ~200 MB | `data/perturbations/` |
+| `metaqa_checkpoints/` (ReaRev backbones, 2-hop and 3-hop) | ~175 MB | `external/GNN-RAG/gnn/checkpoint/pretrain/` |
+
+MetaQA is the non-Freebase replication (Appendix L of the paper). The
+perturbation sets can also be regenerated from scratch with
+`bash scripts/run_metaqa.sh`; see [`data/METAQA.md`](data/METAQA.md) for the
+training recipe and setup notes.
 
 GMT-KBQA data and models are hosted by the original authors. Download from their [official Google Drive](https://drive.google.com/drive/folders/1QT4EG5wxtcLc8_XT5dTZ2WCi1jtByAyf) and extract into `external/GMT-KBQA-data/`.
 
@@ -310,6 +321,19 @@ bash scripts/run_ablation.sh
 ```bash
 python experiments/collect_results.py --results-dir results/ --output results/summary_table.json
 ```
+
+### Step 8: MetaQA replication (non-Freebase KB)
+
+Trains the ReaRev backbone on MetaQA (WikiMovies KB), regenerates all seven
+perturbation types with the same prompts and validity gates, and evaluates on
+the full test sets. See [`data/METAQA.md`](data/METAQA.md) for data setup, the
+training recipe, and two setup gotchas.
+
+```bash
+bash scripts/run_metaqa.sh
+```
+
+Reference values: [`METAQA_RESULTS.md`](METAQA_RESULTS.md).
 
 ---
 

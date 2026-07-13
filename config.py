@@ -11,6 +11,7 @@ REPO_ROOT = Path(os.environ.get("CASCADEATTACK_ROOT", str(Path(__file__).resolve
 
 # --- Data ---
 PERT_DATASET      = REPO_ROOT / "data" / "perturbations"       # canonical p1-p7 sets
+METAQA_DATA_ROOT  = REPO_ROOT / "data" / "metaqa"               # MetaQA 2-hop/3-hop (NSM format)
 PERT_RAW_DIR      = REPO_ROOT / "data" / "perturbations_raw"   # temperature-variant raw sets
 RESOURCES_DIR     = REPO_ROOT / "data" / "resources"
 MID_CACHE_DIR     = REPO_ROOT / "data" / "mid_cache"
